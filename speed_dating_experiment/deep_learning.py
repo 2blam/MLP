@@ -89,8 +89,132 @@ dataset_final = dataset_final.drop(labels=drop_colnames, axis=1)
 
 dataset_final.shape #3167, 87
 
-X = dataset_final.drop(labels="match", axis=1)
+
+# encode categorical data 
+# field_cd, field_cd_F, race, race_F, goal, goal_F, date, date_F, go_out, go_out_F, career_c, career_c_F
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+# create dummy variables for career_c
+colIdx = dataset_final.columns.get_loc("career_c") #14
+col_data = dataset_final.iloc[:, colIdx:(colIdx+1)]
+onehotencoder = OneHotEncoder(categorical_features=[0])
+col_data = onehotencoder.fit_transform(col_data).toarray()
+col_data = col_data[:, 1:] # avoid dummy variable trap, remove 1 dummy variable column
+new_colnames = ['career_c'+str(i) for i in range(1, col_data.shape[1]+1)]
+career_c_data = pd.DataFrame(col_data, columns=new_colnames)
+
+# create dummy variables for career_c_F
+colIdx = dataset_final.columns.get_loc("career_c_F") #15
+col_data = dataset_final.iloc[:, colIdx:(colIdx+1)]
+onehotencoder = OneHotEncoder(categorical_features=[0])
+col_data = onehotencoder.fit_transform(col_data).toarray()
+col_data = col_data[:, 1:] # avoid dummy variable trap, remove 1 dummy variable column
+new_colnames = ['career_c_F'+str(i) for i in range(1, col_data.shape[1]+1)]
+career_c_F_data = pd.DataFrame(col_data, columns=new_colnames)
+            
+# create dummy variables for date
+colIdx = dataset_final.columns.get_loc("date") #15
+col_data = dataset_final.iloc[:, colIdx:(colIdx+1)]
+onehotencoder = OneHotEncoder(categorical_features=[0])
+col_data = onehotencoder.fit_transform(col_data).toarray()
+col_data = col_data[:, 1:] # avoid dummy variable trap, remove 1 dummy variable column
+new_colnames = ['date'+str(i) for i in range(1, col_data.shape[1]+1)]
+date_data = pd.DataFrame(col_data, columns=new_colnames)
+            
+colIdx = dataset_final.columns.get_loc("date_F") #21
+col_data = dataset_final.iloc[:, colIdx:(colIdx+1)]
+onehotencoder = OneHotEncoder(categorical_features=[0])
+col_data = onehotencoder.fit_transform(col_data).toarray()
+col_data = col_data[:, 1:] # avoid dummy variable trap, remove 1 dummy variable column
+new_colnames = ['date_F'+str(i) for i in range(1, col_data.shape[1]+1)]
+date_F_data = pd.DataFrame(col_data, columns=new_colnames)
+       
+colIdx = dataset_final.columns.get_loc("field_cd") #28
+col_data = dataset_final.iloc[:, colIdx:(colIdx+1)]
+onehotencoder = OneHotEncoder(categorical_features=[0])
+col_data = onehotencoder.fit_transform(col_data).toarray()
+col_data = col_data[:, 1:] # avoid dummy variable trap, remove 1 dummy variable column
+new_colnames = ['field_cd'+str(i) for i in range(1, col_data.shape[1]+1)]
+field_cd_data = pd.DataFrame(col_data, columns=new_colnames)
+ 
+
+colIdx = dataset_final.columns.get_loc("field_cd_F") #29
+col_data = dataset_final.iloc[:, colIdx:(colIdx+1)]
+onehotencoder = OneHotEncoder(categorical_features=[0])
+col_data = onehotencoder.fit_transform(col_data).toarray()
+col_data = col_data[:, 1:] # avoid dummy variable trap, remove 1 dummy variable column
+new_colnames = ['field_cd_F'+str(i) for i in range(1, col_data.shape[1]+1)]
+field_cd_F_data = pd.DataFrame(col_data, columns=new_colnames)
+
+colIdx = dataset_final.columns.get_loc("go_out") #38
+col_data = dataset_final.iloc[:, colIdx:(colIdx+1)]
+onehotencoder = OneHotEncoder(categorical_features=[0])
+col_data = onehotencoder.fit_transform(col_data).toarray()
+col_data = col_data[:, 1:] # avoid dummy variable trap, remove 1 dummy variable column
+new_colnames = ['go_out'+str(i) for i in range(1, col_data.shape[1]+1)]
+go_out_data = pd.DataFrame(col_data, columns=new_colnames)
+
+colIdx = dataset_final.columns.get_loc("go_out_F") #39
+col_data = dataset_final.iloc[:, colIdx:(colIdx+1)]
+onehotencoder = OneHotEncoder(categorical_features=[0])
+col_data = onehotencoder.fit_transform(col_data).toarray()
+col_data = col_data[:, 1:] # avoid dummy variable trap, remove 1 dummy variable column
+new_colnames = ['go_out_F'+str(i) for i in range(1, col_data.shape[1]+1)]
+go_out_F_data = pd.DataFrame(col_data, columns=new_colnames)
+
+colIdx = dataset_final.columns.get_loc("goal") #40
+col_data = dataset_final.iloc[:, colIdx:(colIdx+1)]
+onehotencoder = OneHotEncoder(categorical_features=[0])
+col_data = onehotencoder.fit_transform(col_data).toarray()
+col_data = col_data[:, 1:] # avoid dummy variable trap, remove 1 dummy variable column
+new_colnames = ['goal'+str(i) for i in range(1, col_data.shape[1]+1)]
+goal_data = pd.DataFrame(col_data, columns=new_colnames)
+
+
+colIdx = dataset_final.columns.get_loc("goal_F") #41
+col_data = dataset_final.iloc[:, colIdx:(colIdx+1)]
+onehotencoder = OneHotEncoder(categorical_features=[0])
+col_data = onehotencoder.fit_transform(col_data).toarray()
+col_data = col_data[:, 1:] # avoid dummy variable trap, remove 1 dummy variable column
+new_colnames = ['goal_F'+str(i) for i in range(1, col_data.shape[1]+1)]
+goal_F_data = pd.DataFrame(col_data, columns=new_colnames)
+
+colIdx = dataset_final.columns.get_loc("race") #61
+col_data = dataset_final.iloc[:, colIdx:(colIdx+1)]
+onehotencoder = OneHotEncoder(categorical_features=[0])
+col_data = onehotencoder.fit_transform(col_data).toarray()
+col_data = col_data[:, 1:] # avoid dummy variable trap, remove 1 dummy variable column
+new_colnames = ['race'+str(i) for i in range(1, col_data.shape[1]+1)]
+race_data = pd.DataFrame(col_data, columns=new_colnames)
+
+colIdx = dataset_final.columns.get_loc("race_F") #62
+col_data = dataset_final.iloc[:, colIdx:(colIdx+1)]
+onehotencoder = OneHotEncoder(categorical_features=[0])
+col_data = onehotencoder.fit_transform(col_data).toarray()
+col_data = col_data[:, 1:] # avoid dummy variable trap, remove 1 dummy variable column
+new_colnames = ['race_F'+str(i) for i in range(1, col_data.shape[1]+1)]
+race_F_data = pd.DataFrame(col_data, columns=new_colnames)
+
+#column bind dataset_final
+dataset_final = pd.concat([dataset_final, career_c_data], axis=1)
+dataset_final = pd.concat([dataset_final, career_c_F_data], axis=1)
+dataset_final = pd.concat([dataset_final, date_data], axis=1)
+dataset_final = pd.concat([dataset_final, date_F_data], axis=1)
+dataset_final = pd.concat([dataset_final, field_cd_data], axis=1)
+dataset_final = pd.concat([dataset_final, field_cd_F_data], axis=1)
+dataset_final = pd.concat([dataset_final, go_out_data], axis=1)
+dataset_final = pd.concat([dataset_final, go_out_F_data], axis=1)
+dataset_final = pd.concat([dataset_final, goal_data], axis=1)
+dataset_final = pd.concat([dataset_final, goal_F_data], axis=1)
+dataset_final = pd.concat([dataset_final, race_data], axis=1)
+dataset_final = pd.concat([dataset_final, race_F_data], axis=1)
+
+X = dataset_final.drop(labels=["match", "career_c", "career_c_F", "date", \
+                               "date_F", "field_cd", "field_cd_F", "go_out", \
+                               "go_out_F", "goal", "goal_F", "race", "race_F"], axis=1)
+#X = X.iloc[:, :].values
 y = dataset_final["match"].astype(int)
+
+
 
 # split into training and testing dataset
 from sklearn.model_selection import train_test_split
@@ -112,21 +236,21 @@ from keras.layers import Dense
 classifier = Sequential()
 
 # add the input layer & 1st hidden layer
-classifier.add(Dense(output_dim=44,
+classifier.add(Dense(output_dim=86,
                      init="uniform",
                      activation="relu",
-                     input_dim=86)) #set input_dim for the 1st layer only
+                     input_dim=172)) #set input_dim for the 1st layer only
 
 # add 2nd hidden layer
-classifier.add(Dense(output_dim=44,
+classifier.add(Dense(output_dim=86,
                      init="uniform",
                      activation="relu"))
 
 # add 3rd hidden layer
-classifier.add(Dense(output_dim=44,
+classifier.add(Dense(output_dim=86,
                      init="uniform",
                      activation="relu"))
-                     
+
 # add output layer
 # 1 class (e.g. yes vs no): output_dim = 1 AND activation = sigmoid
 # n classes (one hot encode): output_dim = n AND activation = softmax
@@ -143,7 +267,7 @@ classifier.compile(optimizer="adam",
 # fit training data to neural network
 # batch_size - update the weight only after finish a batch of records
 # epoch - 1 epoch is equal to the whole training set passed through the neural network
-classifier.fit(X_train, y_train, batch_size=10, nb_epoch=100)
+classifier.fit(X_train, y_train, batch_size=10, nb_epoch=200)
 
 # save the model
 from keras.models import load_model
