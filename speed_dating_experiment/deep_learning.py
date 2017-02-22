@@ -247,7 +247,7 @@ from keras.layers import Dense
 # NN settings
 numOfInputNodes = 172
 numOfHiddenNodes = 86
-numOfEpoch = 10
+numOfEpoch = 100
 
 # initalize neural network; 
 # NOTE: more than 1 hidden layers, in theory, we call it deep neural network
