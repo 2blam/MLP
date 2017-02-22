@@ -239,6 +239,7 @@ X_test = sc_X.transform(X_test)
 
 
 # ================= Create Neural Network =================
+
 import keras
 from keras.models import Sequential
 from keras.layers import Dense
@@ -246,7 +247,7 @@ from keras.layers import Dense
 # NN settings
 numOfInputNodes = 172
 numOfHiddenNodes = 86
-numOfEpoch = 100
+numOfEpoch = 10
 
 # initalize neural network; 
 # NOTE: more than 1 hidden layers, in theory, we call it deep neural network
