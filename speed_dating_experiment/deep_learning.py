@@ -2,18 +2,19 @@
 
 # import the libraries
 import numpy as np
+np.random.seed(1)
 import matplotlib.pyplot as plt
 import pandas as pd
 
 
 # import dataset
+print("Read CSV file ...")
 dataset = pd.read_csv("Speed Dating Data.csv")
-dataset.shape #8378, 195
 
-# ================= Data Processing =================
-
+# ================= Data Preprocessing =================
+print("Data preprocessing ...")
 # short form
-# pf_o_xxx - partner’s stated preference at Time 1 
+# pf_o_xxx - partner's stated preference at Time 1 
 # XXX1_1 - what you look for in the opposite sex
 # XXX2_1 - What do you think the opposite sex looks for in a date?
 # XXX3_1 - How do you think you measure up (self evaluate)?
@@ -46,7 +47,7 @@ dataset = dataset[(dataset['wave']<6) | (dataset['wave'] > 9)] #6816 rows
 
 # 3) remove rows with missing values
 idx = dataset.isnull().any(1).nonzero()[0]
-print (len(idx))
+
 dataset = dataset.drop(dataset.index[idx]) # drop rows with na values
 
 # 4) pair the male and female member to form a new dataset
@@ -85,8 +86,6 @@ for idx in dataset_male.index.values:
 # drop irrevlant columns
 drop_colnames = ["iid", "iid_F", "wave", "wave_F", "match_F", "pid", "pid_F", "gender", "gender_F"]
 dataset_final = dataset_final.drop(labels=drop_colnames, axis=1)
-
-dataset_final.shape #3167, 87
 
 # encode categorical data 
 # field_cd, field_cd_F, race, race_F, goal, goal_F, date, date_F, go_out, go_out_F, career_c, career_c_F
@@ -217,10 +216,10 @@ dataset_final = pd.concat([dataset_final, race_F_data], axis=1)
 
 
 # ================= Prepare training and test data =================
+print("Prepare training and test data ...")
 X = dataset_final.drop(labels=["match", "career_c", "career_c_F", "date", \
                                "date_F", "field_cd", "field_cd_F", "go_out", \
                                "go_out_F", "goal", "goal_F", "race", "race_F"], axis=1)
-X.shape
 
 y = dataset_final["match"].astype(int)
 
@@ -239,7 +238,10 @@ X_test = sc_X.transform(X_test)
 
 
 # ================= Create Neural Network =================
-
+print("Create neural network ...")
+np.random.seed(1)
+import tensorflow as tf
+tf.set_random_seed(1)
 import keras
 from keras.models import Sequential
 from keras.layers import Dense
@@ -278,9 +280,9 @@ classifier.add(Dense(output_dim=1,
                      init="uniform",
                      activation="sigmoid"))
 # compile neural network
-# adam - Adaptive Moment Estimation 
+# sgd - Stochastic gradient descent
 # binary_crossentropy - https://keras.io/objectives/
-classifier.compile(optimizer="adam",
+classifier.compile(optimizer="sgd",
                    loss="binary_crossentropy",
                    metrics=["accuracy"])
 
@@ -288,6 +290,7 @@ classifier.compile(optimizer="adam",
 
 
 # ================= Train the Neural Network =================
+print("Train neural network ...")
 # fit training data to neural network
 # batch_size - update the weight only after finish a batch of records
 # epoch - 1 epoch is equal to the whole training set passed through the neural network
@@ -312,4 +315,4 @@ from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
 
 accuracy = 1.0*(cm[0,0] + cm[1,1]) / (cm[0,0]+cm[0,1]+cm[1,0]+cm[1,1])
-print(accuracy * 100)
+print("Accuracy (in %%) %.2f: " % (accuracy * 100))
