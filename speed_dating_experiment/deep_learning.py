@@ -272,7 +272,6 @@ classifier.add(Dense(output_dim=numOfHiddenNodes,
                      init="uniform",
                      activation="relu"))
 
-
 # add output layer
 # 1 class (e.g. yes vs no): output_dim = 1 AND activation = sigmoid
 # n classes (one hot encode): output_dim = n AND activation = softmax
@@ -280,9 +279,9 @@ classifier.add(Dense(output_dim=1,
                      init="uniform",
                      activation="sigmoid"))
 # compile neural network
-# sgd - Stochastic gradient descent
+# adam - a efficient stochastic gradient descent
 # binary_crossentropy - https://keras.io/objectives/
-classifier.compile(optimizer="sgd",
+classifier.compile(optimizer="adam",
                    loss="binary_crossentropy",
                    metrics=["accuracy"])
 
