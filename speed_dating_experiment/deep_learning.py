@@ -249,7 +249,7 @@ from keras.layers import Dense
 # NN settings
 numOfInputNodes = 172
 numOfHiddenNodes = 86
-numOfEpoch = 100
+numOfEpoch = 50
 
 # initalize neural network; 
 # NOTE: more than 1 hidden layers, in theory, we call it deep neural network
@@ -272,6 +272,74 @@ classifier.add(Dense(output_dim=numOfHiddenNodes,
                      init="uniform",
                      activation="relu"))
 
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
+classifier.add(Dense(output_dim=numOfHiddenNodes,
+                     init="uniform",
+                     activation="relu"))
+
 # add output layer
 # 1 class (e.g. yes vs no): output_dim = 1 AND activation = sigmoid
 # n classes (one hot encode): output_dim = n AND activation = softmax
@@ -279,7 +347,7 @@ classifier.add(Dense(output_dim=1,
                      init="uniform",
                      activation="sigmoid"))
 # compile neural network
-# adam - a efficient stochastic gradient descent
+# adam - an efficient stochastic gradient descent (https://arxiv.org/abs/1412.6980v8)
 # binary_crossentropy - https://keras.io/objectives/
 classifier.compile(optimizer="adam",
                    loss="binary_crossentropy",
