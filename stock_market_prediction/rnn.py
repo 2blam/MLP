@@ -36,7 +36,7 @@ model = Sequential()
 
 model.add(LSTM(
     input_dim=1,
-    output_dim=50,
+    output_dim=20,
     return_sequences=True))
 
 model.add(LSTM(
@@ -98,6 +98,14 @@ plt.plot(predictions_org, label='Prediction')
 plt.legend()
 plt.title("RNN Result (Denormalized)")
 plt.show()
+
+#fig = plt.figure(facecolor='white')
+#ax = fig.add_subplot(111) #111- 1x1 grid, first subplot
+#ax.plot(y_test, label='True Data')
+#plt.plot(predictions, label='Prediction')
+#plt.legend()
+#plt.title("RNN Result (Normalized)")
+#plt.show()
 
 from sklearn.metrics import mean_squared_error
 mse = mean_squared_error(predictions_org, y_test_org.astype(float).tolist())
