@@ -11,31 +11,28 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-# ================= Create Recurrent Neural Network =================
-print("Create recurrent neural network ...")
+
 from keras.layers.core import Dense, Activation, Dropout
 from keras.layers.recurrent import LSTM
 from keras.models import Sequential
-import lstm, time #helper libraries
+import lstm, time #helper functions - see lstm.py
 
-# load_data(filename, seq_len, normalise_window)
-# sp500.csv - 4170 values
-
+# load data
+# - sliding window side: 50 elements
+# - normalization
+# - 90% for the training; 10% for testing 
 X_train, y_train, X_test, y_test = lstm.load_data('sp500.csv', 50, True)
-# 50 is the size of the sliding window
-# 90% for the training; 10% for testing 
 
-# get the inital value 
-dataset = pd.read_csv('sp500.csv', header=None)
-p0 = float(dataset.iloc[0])
-
+# ================= Create Recurrent Neural Network =================
+print("Create recurrent neural network ...")
 # RNN settings
+# - network with 1-dimension input; 
+# - 2 hidden layers of size: 20 and 100;
+# - 1-dimension output
+
 # initalize reecurrent neural network; 
 model = Sequential()
 
-# - network with 1-dimension input; 
-# - 2 hidden layers of size: 50 and 100;
-# - 1-dimension output
 
 model.add(LSTM(
     input_dim=1,
@@ -46,15 +43,14 @@ model.add(LSTM(
     100,
     return_sequences=False))
 
-# add output layer; output_dim =1
 model.add(Dense(output_dim=1))
 
-model.add(Activation("linear")) # as we do regression
+model.add(Activation("linear")) # regression - predict value 
 
 # compile neural network
 model.compile(optimizer='rmsprop', loss='mse')
 
-# ================= END of Create Neural Network =================
+# ================= END of Create Recurrent Neural Network =================
 
 
 # ================= Train the Neural Network =================
@@ -83,26 +79,45 @@ model.fit(
 # ================= Predict   =================
 predictions = lstm.predict_point_by_point(model, X_test)
 
-#denormalize
-y_test_denormalized = [p0 * i for i in (y_test+1).tolist()]
-predictions_denormalized = [p0 * i for i in (predictions+1).tolist()]
+
+# get the original value (no normalization) 
+X_train_org, y_train_org, X_test_org, y_test_org = lstm.load_data('sp500.csv', 50, False)
+
+predictions_org = []
+for idx in range(y_test_org.shape[0]):
+    #get the first value
+    p0 = X_test_org[idx].astype(float)[0][0]
+    pi = predictions[idx]
+    predictions_org.append((pi+1)*p0)
+    
 
 fig = plt.figure(facecolor='white')
-ax = fig.add_subplot(111)
-ax.plot(y_test_denormalized, label='True Data')
-plt.plot(predictions_denormalized, label='Prediction')
+ax = fig.add_subplot(111) #111- 1x1 grid, first subplot
+ax.plot(y_test_org, label='True Data')
+plt.plot(predictions_org, label='Prediction')
 plt.legend()
+plt.title("RNN Result (Denormalized)")
 plt.show()
 
 from sklearn.metrics import mean_squared_error
-mean_squared_error(predictions_denormalized, y_test_denormalized)
+mse = mean_squared_error(predictions_org, y_test_org.astype(float).tolist())
 
 # up / down prediction accuracy?
-truthResult = np.diff(y_test) > 0
-predResult = np.diff(predictions) > 0
+updown_org = []
+updown_pred = []
+for idx in range(y_test_org.shape[0]):
+    #get the last value
+    last_element = X_test_org[idx].astype(float)[49][0]
+    actual_value = y_test_org[idx].astype(float)
+
+    pred_value = predictions_org[idx]
+    updown_org.append(True if actual_value > last_element else False)
+    updown_pred.append(True if pred_value > last_element else False)
                     
 #XNOR
-corrPredTrend = ~(truthResult ^ predResult)
-
+corrPredTrend = 0
+for idx in range(len(updown_org)):
+    if updown_org[idx] == updown_pred[idx]:
+        corrPredTrend = corrPredTrend+1
 #accuracy
-accuracy = (sum(corrPredTrend) *1.0) / len(corrPredTrend) * 100
+accuracy = (corrPredTrend *1.0) / len(updown_org) * 100

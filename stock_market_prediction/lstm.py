@@ -35,11 +35,11 @@ def load_data(filename, seq_len, normalise_window):
     for index in range(len(data) - sequence_length):
         result.append(data[index: index + sequence_length])
     
-    if normalise_window:
+    if normalise_window: #center the data to ZERO mean
         result = normalise_windows(result)
 
     result = np.array(result)
-
+    
     row = round(0.9 * result.shape[0])
     train = result[:int(row), :]
     np.random.shuffle(train)
